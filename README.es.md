@@ -40,7 +40,54 @@ Para esta práctica específica de Spoofing y DoS, es mejor configurar la red co
 
 ## 📝 Instrucciones
 
-### Paso 1: Configurar la Red en VirtualBox
+### Paso 1: Instalar aplicaciones y Configurar la Red en VirtualBox
+
+#### En la Máquina Kali Linux (Atacante):
+
+* [ ] Instalar arpspoof:
+
+```bash
+sudo apt update
+sudo apt install dsniff
+```
+
+> *Nota: arpspoof es parte del paquete dsniff..*
+
+ * [ ] Verifica si arpspoof está instalado:
+
+ ```bash
+sudo arpspoof -h
+```
+#### instalar Wireshark en la Máquina Debian (Servidor Web):
+
+Wireshark es ideal para analizar el tráfico de red, identificar posibles ataques y monitorear la seguridad en un entorno de red.
+
+* [ ] Instalar Wireshark:
+
+```bash
+sudo apt update
+sudo apt install wireshark
+```
+
+Durante la instalación, es posible que te pregunten si los usuarios no root deberían poder capturar paquetes. Selecciona "Sí". Si completaste la instalación sin esta configuración, puedes configurarlo más tarde con:
+
+```bash
+sudo dpkg-reconfigure wireshark-common
+```
+
+* [ ] Agrega tu usuario al grupo de Wireshark:
+
+```bash
+sudo usermod -aG wireshark $USER
+```
+
+> ***NOTA:*** $USER es el nombre de usuario que usas en la máquina virtual Debian.
+
+Una vez completada la instalación, cierra sesión y vuelve a iniciarla para aplicar los cambios de grupo. Puedes iniciar Wireshark ejecutando:
+
+```bash
+sudo wireshark
+```
 
 #### Configurar la Red de la Máquina Debian (Servidor Web):
 - [ ] Abre VirtualBox.
@@ -155,23 +202,6 @@ $ ping <IP_kali>
 
 Para realizar esta práctica, utilizaremos arpspoof. Esta herramienta se usa para enviar paquetes ARP falsificados a la red, haciendo que un dispositivo (como la máquina Debian) crea que la dirección MAC del atacante (Kali Linux) es la dirección MAC del gateway (router). Esto se puede verificar observando las tablas ARP en la máquina Debian antes y después de ejecutar arpspoof.
 
-#### En la Máquina Kali Linux (Atacante):
-
-* [ ] Instalar arpspoof:
-
-```bash
-sudo apt update
-sudo apt install dsniff
-```
-
-> *Nota: arpspoof es parte del paquete dsniff..*
-
- * [ ] Verifica si arpspoof está instalado:
-
- ```bash
-sudo arpspoof -h
-```
-
 * [ ] Ejecuta arpspoof para envenenar las tablas ARP de la máquina Debian y el gateway:
 
 ```bash
@@ -182,37 +212,6 @@ sudo arpspoof -i <interfaz_kali> -t <IP_debian> <gateway>
 * -t <IP_debian>: Especifica la dirección IP de la víctima (la máquina Debian en este caso).
 * <gateway>: Especifica la dirección IP del gateway. (inicialmente configurado en el archivo /etc/network/interfaces, es el mismo para ambas máquinas)
 
-#### Monitorear con Wireshark en la Máquina Debian (Servidor Web):
-
-Wireshark es ideal para analizar el tráfico de red, identificar posibles ataques y monitorear la seguridad en un entorno de red.
-
-* [ ] Instalar Wireshark:
-
-```bash
-sudo apt update
-sudo apt install wireshark
-```
-
-Durante la instalación, es posible que te pregunten si los usuarios no root deberían poder capturar paquetes. Selecciona "Sí". Si completaste la instalación sin esta configuración, puedes configurarlo más tarde con:
-
-```bash
-sudo dpkg-reconfigure wireshark-common
-```
-
-* [ ] Agrega tu usuario al grupo de Wireshark:
-
-```bash
-sudo usermod -aG wireshark $USER
-```
-
-> ***NOTA:*** $USER es el nombre de usuario que usas en la máquina virtual Debian.
-
-Una vez completada la instalación, cierra sesión y vuelve a iniciarla para aplicar los cambios de grupo. Puedes iniciar Wireshark ejecutando:
-
-```bash
-sudo wireshark
-```
- 
 ### Monitorización y Análisis
 
 * [ ] Con Wireshark abierto, pulse el botón «play» para empezar a capturar paquetes.
